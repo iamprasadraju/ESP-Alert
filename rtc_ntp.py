@@ -1,41 +1,12 @@
 import time
 
 import machine
-import network
 import ntptime
 from machine import RTC, mem32
 
 import config
 
-# Disable brownout
-RTC_CNTL_BROWN_OUT_REG = 0x3FF480D4
-mem32[RTC_CNTL_BROWN_OUT_REG] = 0
-
-ssid = "Prasad"
-password = "qwertyuiop"
-
 ntptime.host = "time.nplindia.org"
-
-
-def connect_wifi():
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-
-    if not wlan.isconnected():
-        print("Connecting WiFi...")
-        wlan.connect(config.WIFI_SSID, config.WIFI_PASSWORD)
-
-        timeout = 15
-        while not wlan.isconnected() and timeout > 0:
-            print(".", end="")
-            time.sleep(1)
-            timeout -= 1
-
-        if not wlan.isconnected():
-            print("WiFi failed. Restarting.")
-            machine.reset()
-
-    print("\nConnected:", wlan.ifconfig())
 
 
 def sync_time():
